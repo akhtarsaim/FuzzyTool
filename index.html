@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuzzy Decision Making</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1 class="heading">Fuzzy Decision Making</h1>
+    <form method="POST">
+        <div class="input-item">
+            <div>
+                <label for="num_evaluators">Number of Evaluators:</label>
+                <input class="inp" type="number" id="num_evaluators" name="num_evaluators" min="1" required><br>
+            </div>
+            <div>
+                <label for="num_oas">Number of Operational Attributes (OAs):</label>
+                <input class="inp" type="number" id="num_oas" name="num_oas" min="1" required><br>
+            </div>
+            <div>
+                <label for="num_fas">Number of Functional Attributes (FAs):</label>
+                <input class="inp" type="number" id="num_fas" name="num_fas" min="1" required><br>
+            </div>
+        </div>
+
+        <div class="button">
+            <button class="btn" type="button" onclick="generateInputs()">Generate Rating Inputs</button><br><br>
+        </div>
+
+        <div id="rating_inputs"></div>
+
+        <div class="button">
+            <input class="btn" type="submit" value="Submit">
+        </div>
+    </form>
+
+    <script>
+        function generateInputs() {
+            const num_evaluators = document.querySelector('#num_evaluators').value;
+            const num_oas = document.querySelector('#num_oas').value;
+            const num_fas = document.querySelector('#num_fas').value;
+            const container = document.querySelector('#rating_inputs');
+            container.innerHTML = '';
+
+            if (num_evaluators && num_oas) {
+                for (let i = 1; i <= num_oas; i++) {
+                    container.innerHTML += `
+                    <h3>Ratings for OA${i} by each Evaluator:</h3>
+                    <div class="boxes">
+                        ${Array.from({ length: num_evaluators }, (_, j) => `
+                        <div>
+                            <label for="OA${i}_eval${j + 1}">Evaluator ${j + 1}:</label>
+                            <select id="OA${i}_eval${j + 1}" name="OA${i}_eval${j + 1}" required>
+                                <option value="VP">VP</option>
+                                <option value="P">P</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="VG">VG</option>
+                            </select><br>
+                        </div>
+                        `).join('')}
+                    </div>`;
+                }
+            }
+
+            if (num_fas && num_oas) {
+                for (let i = 1; i <= num_fas; i++) {
+                    container.innerHTML += `<h3>Ratings for FA${i} under each OA by each Evaluator:</h3>`;
+                    for (let j = 1; j <= num_evaluators; j++) {
+                        let selectsHtml = '';
+                        for (let k = 1; k <= num_oas; k++) {
+                            selectsHtml += `
+                            <select id="FA${i}_OA${k}_eval${j}" name="FA${i}_OA${k}_eval${j}" required>
+                                <option value="" disabled selected>OA${k}</option>
+                                <option value="VP">VP</option>
+                                <option value="P">P</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="VG">VG</option>
+                            </select>
+                            `;
+                        }
+                        container.innerHTML += `
+                        <label for="FA${i}_OA${j}">Evaluator ${j}:</label>
+                        <div class="boxes">
+                            ${selectsHtml}
+                        </div>
+                        <br><br>`;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

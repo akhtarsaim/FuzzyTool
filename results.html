@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuzzy Decision Making Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Fuzzy Decision Making Results</h1>
+
+    <h2>Fuzzy Weights for OAs</h2>
+    <table>
+        <tr>
+            <th>OAs</th>
+            <th>Fuzzy Weight</th>
+        </tr>
+        {% for oa, weight in oa_weights.items() %}
+        <tr>
+            <td>{{ oa }}</td>
+            <td>{{ weight }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Fuzzy Decision Matrix</h2>
+    <table>
+        {% set first_item = fuzzy_decision_matrix.values() | first %}
+        {% set oa_columns = first_item.keys() %}
+
+        <tr>
+            <th rowspan="2">FAs</th>
+            <th colspan="{{ oa_columns | length }}">OAs</th>
+        </tr>
+        <tr>
+            {% for oa in oa_columns %}
+            <th>{{ oa }}</th>
+            {% endfor %}
+        </tr>
+        {% for fa, oa_dict in fuzzy_decision_matrix.items() %}
+        <tr>
+            <td>{{ fa }}</td>
+            {% for oa in oa_columns %}
+            <td>{{ oa_dict[oa] }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Weighted Fuzzy Decision Matrix</h2>
+    <table>
+        {% set first_item = weighted_fuzzy_decision_matrix.values() | first %}
+        {% set oa_columns = first_item.keys() %}
+
+        <tr>
+            <th rowspan="2">FAs</th>
+            <th colspan="{{ oa_columns | length }}">OAs</th>
+        </tr>
+        <tr>
+            {% for oa in oa_columns %}
+            <th>{{ oa }}</th>
+            {% endfor %}
+        </tr>
+        {% for fa, oa_dict in weighted_fuzzy_decision_matrix.items() %}
+        <tr>
+            <td>{{ fa }}</td>
+            {% for oa in oa_columns %}
+            <td>{{ oa_dict[oa] }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>FPIS</h2>
+    <table>
+        <tr>
+            <th>FA</th>
+            <th>FPIS</th>
+        </tr>
+        {% for fa, value in fpis.items() %}
+        <tr>
+            <td>{{ fa }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>FNIS</h2>
+    <table>
+        <tr>
+            <th>FA</th>
+            <th>FNIS</th>
+        </tr>
+        {% for fa, value in fnis.items() %}
+        <tr>
+            <td>{{ fa }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Distances from FPIS</h2>
+    <table>
+        <tr>
+            <th>FA</th>
+            <th>Distance from FPIS</th>
+        </tr>
+        {% for fa, value in distances_from_fpis.items() %}
+        <tr>
+            <td>{{ fa }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Distances from FNIS</h2>
+    <table>
+        <tr>
+            <th>FA</th>
+            <th>Distance from FNIS</th>
+        </tr>
+        {% for fa, value in distances_from_fnis.items() %}
+        <tr>
+            <td>{{ fa }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Similarity Coefficients (SC)</h2>
+    <table>
+        <tr>
+            <th>FA</th>
+            <th>Similarity Coefficient (SC)</th>
+        </tr>
+        {% for fa, value in similarity_coefficients.items() %}
+        <tr>
+            <td>{{ fa }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Rankings of Alternatives</h2>
+    <table>
+        <tr>
+            <th>Rank</th>
+            <th>FA</th>
+        </tr>
+        {% for fa, rank in rankings.items() %}
+        <tr>
+            <td>{{ rank }}</td>
+            <td>{{ fa }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
